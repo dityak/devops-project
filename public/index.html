@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Daily Quiz Wall - Start</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .fade-out {
+      animation: fadeOut 1s forwards;
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+    }
+
+    .error {
+      color: #ff6666;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="landing-container">
+    <h1>🎉 Welcome to the Daily Quiz Wall</h1>
+    <p>Please enter your name and email to get started:</p>
+    <input type="text" id="name" placeholder="Your name" required />
+    <input type="email" id="email" placeholder="Your email" required />
+    <button onclick="startGame()">Continue</button>
+    <p id="error-msg" class="error"></p>
+  </div>
+
+  <script>
+    function startGame() {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const errorMsg = document.getElementById('error-msg');
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!name || !email) {
+        errorMsg.innerText = "Please enter both your name and email.";
+        return;
+      } else if (!emailPattern.test(email)) {
+        errorMsg.innerText = "Please enter a valid email address.";
+        return;
+      }
+
+      errorMsg.innerText = "";
+
+      // Save to local storage
+      localStorage.setItem('name', name);
+      localStorage.setItem('email', email);
+
+      // Save to backend
+      fetch('/api/user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email })
+      }).then(() => {
+        const container = document.getElementById('landing-container');
+        container.classList.add('fade-out');
+        setTimeout(() => {
+          window.location.href = "gamemode.html";
+        }, 1000); // 1 second fade-out duration
+      });
+    }
+  </script>
+</body>
+</html>

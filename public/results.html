@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head><title>Results</title><link rel="stylesheet" href="style.css"></head>
+<body>
+  <div class="container">
+    <h2>📈 Your Quiz Stats</h2>
+    <p>Name: <span id="resName"></span></p>
+    <p>Email: <span id="resEmail"></span></p>
+    <p>Score: <span id="resScore">0</span></p>
+    <p>Streak: <span id="resStreak">0</span></p>
+    <button onclick="restart()">Take Tomorrow's Quiz</button>
+  </div>
+  <script>
+    document.getElementById('resName').textContent = localStorage.getItem('name');
+    document.getElementById('resEmail').textContent = localStorage.getItem('email');
+    document.getElementById('resScore').textContent = localStorage.getItem('score') || 0;
+    document.getElementById('resStreak').textContent = localStorage.getItem('streak') || 0;
+    function restart() {
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>

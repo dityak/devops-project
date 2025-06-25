@@ -1,0 +1,20 @@
+[
+    {
+      "grid": [
+        ["C", "A", "T", ""],
+        ["", "", "R", ""],
+        ["D", "O", "G", ""]
+      ],
+      "clues": {
+        "across": {
+          "1": "A small domesticated feline",
+          "3": "A common pet that barks"
+        },
+        "down": {
+          "1": "Starts with C, man's best friend is one",
+          "2": "Opposite of up"
+        }
+      }
+    }
+  ]
+  
