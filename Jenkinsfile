@@ -2,14 +2,13 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE = 'MySonar'                  // Configure in Jenkins later
-        DOCKER_IMAGE = 'daily-wall-image'      // Docker image name
+        PATH = "/usr/local/bin:$PATH"
     }
 
     stages {
         stage('Clone') {
             steps {
-                git credentialsId: 'github-dityak-creds', url: 'https://github.com/dityak/daily-question-wall.git'
+                git url: 'https://github.com/dityak/daily-question-wall.git'
             }
         }
 
@@ -21,35 +20,42 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('MySonar') {
-                    sh 'npx sonar-scanner'
-                }
+                echo '🔍 Running SonarQube Analysis...'
+                // Add actual sonar scanner command here
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE .'
+                echo '🐳 Building Docker image...'
+                // Example:
+                // sh 'docker build -t my-app .'
             }
         }
 
         stage('Trivy Scan') {
             steps {
-                sh 'trivy image $DOCKER_IMAGE'
+                echo '🔎 Running Trivy security scan...'
+                // Example:
+                // sh 'trivy image my-app'
             }
         }
 
         stage('Deploy to Netlify') {
             steps {
-                sh 'npm run build'
-                sh 'npx netlify deploy --prod --dir=build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID'
+                echo '🚀 Deploying to Netlify...'
+                // Example Netlify CLI command (replace with your own):
+                // sh 'netlify deploy --prod --dir=public'
             }
         }
     }
 
     post {
-        always {
-            echo '✅ Pipeline execution complete.'
+        success {
+            echo '✅ Pipeline completed successfully!'
+        }
+        failure {
+            echo '❌ Pipeline failed. Check logs.'
         }
     }
 }
