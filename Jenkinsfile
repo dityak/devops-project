@@ -5,7 +5,7 @@ pipeline {
         PATH = "/usr/local/bin:$PATH"
         IMAGE_NAME = "dailywall-app"
         SONAR_AUTH_TOKEN = credentials('SONAR_AUTH_TOKEN')
-        NETLIFY_SITE_ID = "69676a72-951c-4074-b3fe-e619729f8ea9" // Updated with your Site ID
+        NETLIFY_SITE_ID = "69676a72-951c-4074-b3fe-e619729f8ea9" // Your Site ID
     }
 
     stages {
@@ -52,7 +52,7 @@ pipeline {
             steps {
                 sh 'npm run build'
                 withCredentials([string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN')]) {
-                    sh 'npx netlify-cli deploy --prod --dir=dist --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID --no-input'
+                    sh 'npx netlify-cli deploy --prod --dir=dist --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID'
                 }
             }
         }
