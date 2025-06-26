@@ -20,8 +20,11 @@ pipeline {
             }
         }
 
-       stage('SonarQube Analysis') {
+      stage('SonarQube Analysis') {
     steps {
+        echo '🔍 Installing sonar-scanner...'
+        sh 'npm install -g sonar-scanner'  // ✅ install the CLI temporarily
+
         echo '🔍 Running SonarQube Analysis...'
         withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
             withSonarQubeEnv('SonarQube') {
@@ -36,6 +39,7 @@ pipeline {
         }
     }
 }
+
 
         stage('Build Docker Image') {
             steps {
