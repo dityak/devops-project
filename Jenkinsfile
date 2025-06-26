@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SONAR_AUTH_TOKEN = credentials('SONAR_AUTH_TOKEN')
+        PATH = "/usr/local/bin:$PATH"
     }
 
     stages {
@@ -19,16 +19,19 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
+            environment {
+                SONAR_AUTH_TOKEN = credentials('SONAR_AUTH_TOKEN')
+            }
             steps {
                 echo '🔍 Running SonarQube Analysis...'
                 withSonarQubeEnv('SonarQube') {
-                    sh '''
+                    sh """
                         sonar-scanner \
                         -Dsonar.projectKey=daily-question-wall \
                         -Dsonar.sources=. \
                         -Dsonar.host.url=http://localhost:9001 \
                         -Dsonar.login=$SONAR_AUTH_TOKEN
-                    '''
+                    """
                 }
             }
         }
