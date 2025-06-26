@@ -31,7 +31,9 @@ pipeline {
                 echo '🔍 Running SonarQube Analysis...'
                 withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
                     withSonarQubeEnv('SonarQube') {
+
                         sh """
+
     sonar-scanner \
     -Dsonar.projectKey=devops-project \
     -Dsonar.sources=. \
