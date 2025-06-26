@@ -7,11 +7,13 @@ pipeline {
         SONAR_AUTH_TOKEN = credentials('SONAR_AUTH_TOKEN')
     }
 
-    stage('Clone') {
-    steps {
-        git url: 'https://github.com/dityak/devops-project.git'
-    }
-}
+    stages {
+        stage('Clone') {
+            steps {
+                git url: 'https://github.com/dityak/devops-project.git'
+            }
+        }
+
 
 
         stage('Install Dependencies') {
