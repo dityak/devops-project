@@ -5,7 +5,7 @@ pipeline {
         PATH = "/usr/local/bin:$PATH"
         IMAGE_NAME = "dailywall-app"
         SONAR_AUTH_TOKEN = credentials('SONAR_AUTH_TOKEN')
-        NETLIFY_SITE_ID = "69676a72-951c-4074-b3fe-e619729f8ea9" // Your Site ID
+        NETLIFY_SITE_ID = "69676a72-951c-4074-b3fe-e619729f8ea9"
     }
 
     stages {
@@ -18,7 +18,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
-                sh 'npm install -g netlify-cli' // Install netlify CLI globally
+                sh 'npm install -g netlify-cli' // For Netlify deployment
             }
         }
 
@@ -30,7 +30,9 @@ pipeline {
                 echo '🔍 Running SonarQube Analysis...'
                 withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
                     withSonarQubeEnv('SonarQube') {
-                        sh 'sonar-scanner'
+                        dir("${env.WORKSPACE}") {
+                            sh 'sonar-scanner'
+                        }
                     }
                 }
             }
@@ -50,9 +52,9 @@ pipeline {
 
         stage('Deploy to Netlify') {
             steps {
-                sh 'npm run build'
+                sh 'npm run build' // This should generate the "build" folder
                 withCredentials([string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN')]) {
-                    sh 'npx netlify-cli deploy --prod --dir=dist --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID'
+                    sh 'npx netlify deploy --prod --dir=build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID'
                 }
             }
         }
