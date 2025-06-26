@@ -24,23 +24,16 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
-                echo '🔍 Running SonarQube Analysis...'
-                withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
-                    withSonarQubeEnv('SonarQube') {
-                        sh '''
-                            sonar-scanner \
-                            -Dsonar.projectKey=dailywall-app \
-                            -Dsonar.projectName="Daily Wall App" \
-                            -Dsonar.sources=. \
-                            -Dsonar.sourceEncoding=UTF-8 \
-                            -Dsonar.host.url=http://192.168.0.182:9001 \
-                            -Dsonar.token=$SONAR_AUTH_TOKEN
-                        '''
-                    }
-                }
+    steps {
+        echo '🔍 Running SonarQube Analysis...'
+        withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
+            withSonarQubeEnv('SonarQube') {
+                sh "cd ${env.WORKSPACE} && sonar-scanner -Dsonar.projectKey=dailywall-app -Dsonar.projectName='Daily Wall App' -Dsonar.sources=. -Dsonar.sourceEncoding=UTF-8 -Dsonar.host.url=http://192.168.0.182:9001 -Dsonar.token=${SONAR_AUTH_TOKEN}"
             }
         }
+    }
+}
+
 
         stage('Build Docker Image') {
             steps {
