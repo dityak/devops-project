@@ -10,7 +10,8 @@ pipeline {
     stages {
         stage('Clone') {
             steps {
-                git url: 'https://github.com/dityak/daily-question-wall.git'
+                git url: 'https://github.com/dityak/devops-project.git'
+
             }
         }
 
