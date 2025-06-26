@@ -11,6 +11,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 checkout scm // ✅ Uses Jenkins' default checkout mechanism
+                
             }
         }
 
@@ -23,14 +24,18 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 echo '🔍 Installing sonar-scanner...'
+
                 sh 'npm install -g sonar-scanner' // ✅ install the CLI temporarily
+
 
                 echo '🔍 Running SonarQube Analysis...'
                 withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
                     withSonarQubeEnv('SonarQube') {
                         sh '''
                             sonar-scanner \
-                            -Dsonar.projectKey=daily-question-wall \
+
+                            -Dsonar.projectKey=devops-project \
+
                             -Dsonar.sources=. \
                             -Dsonar.host.url=http://192.168.0.182:9001 \
                             -Dsonar.token=$SONAR_AUTH_TOKEN
