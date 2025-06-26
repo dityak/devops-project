@@ -3,81 +3,17 @@
 <head>
   <title>Daily Crossword</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    .crossword-container {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .grid-wrapper {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(30px, 30px));
-      gap: 2px;
-      margin-left: 30px;
-      position: relative;
-    }
-
-    .cell {
-      width: 30px;
-      height: 30px;
-      text-align: center;
-      text-transform: uppercase;
-      font-weight: bold;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      background-color: white;
-    }
-
-    .cell:disabled {
-      background-color: #3a3a3a;
-      border: 1px solid #555;
-    }
-
-    .number-label {
-      font-size: 12px;
-      position: absolute;
-      color: #ccc;
-      top: -25px;
-      text-align: center;
-      width: 30px;
-    }
-
-    .row-label {
-      position: absolute;
-      left: -25px;
-      font-size: 12px;
-      color: #ccc;
-    }
-
-    #submitBtn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: #1e90ff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    #submitBtn:hover {
-      background-color: #187bcd;
-    }
-  </style>
 </head>
 <body>
   <div class="container">
     <h2>🧩 Daily Crossword</h2>
-    <div class="crossword-container">
-      <div id="labels"></div>
-      <div class="grid-wrapper" id="crossword"></div>
-    </div>
-    <button id="submitBtn" onclick="checkAnswers()">✅ Submit</button>
-
+    <div id="crossword"></div>
     <h3>Clues</h3>
     <div id="clues"></div>
-    <div id="feedback" style="margin-top: 10px; font-weight: bold;"></div>
+
+    <!-- ✅ Add submit button and feedback -->
+    <button id="submitCrossword" onclick="checkCrossword()">✅ Submit</button>
+    <p id="crosswordFeedback"></p>
   </div>
 
   <script src="crossword.js"></script>
