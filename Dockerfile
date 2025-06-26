@@ -1,6 +1,5 @@
-# Use official Node.js base image
-FROM node:18-slim
-
+# Use official Node.js Alpine base image for security and size
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
@@ -9,14 +8,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --production
 
-# Copy the rest of your app code
+# Copy the rest of your app code (excluding .dockerignore files)
 COPY . .
 
-# Expose port if your app listens on one (change if needed)
+# Expose port if your app listens on one
 EXPOSE 3000
 
 # Start the application
 CMD ["node", "server.js"]
-
