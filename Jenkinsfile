@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         PATH = "/usr/local/bin:$PATH"
+        SONAR_AUTH_TOKEN = credentials('SONAR_AUTH_TOKEN')
     }
 
     stages {
@@ -19,19 +20,16 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            environment {
-                SONAR_AUTH_TOKEN = credentials('SONAR_AUTH_TOKEN')
-            }
             steps {
+                echo '🔍 Running SonarQube Analysis...'
                 withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
-                    echo '🔍 Running SonarQube Analysis...'
                     withSonarQubeEnv('SonarQube') {
                         sh '''
                             sonar-scanner \
                             -Dsonar.projectKey=daily-question-wall \
                             -Dsonar.sources=. \
                             -Dsonar.host.url=http://192.168.0.182:9001 \
-                            -Dsonar.login=$SONAR_AUTH_TOKEN
+                            -Dsonar.token=$SONAR_AUTH_TOKEN
                         '''
                     }
                 }
@@ -41,24 +39,22 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo '🐳 Building Docker image...'
-                // Replace with your Docker command
-                // sh 'docker build -t my-app .'
+                sh 'docker build -t daily-question-wall .'
             }
         }
 
         stage('Trivy Scan') {
             steps {
                 echo '🔎 Running Trivy security scan...'
-                // Replace with Trivy scan command
-                // sh 'trivy image my-app'
+                sh 'trivy image daily-question-wall || true'
             }
         }
 
         stage('Deploy to Netlify') {
             steps {
                 echo '🚀 Deploying to Netlify...'
-                // Replace with your Netlify deploy command
-                // sh 'netlify deploy --prod --dir=public'
+                sh 'npm run build'
+                sh 'netlify deploy --prod --dir=build'
             }
         }
     }
