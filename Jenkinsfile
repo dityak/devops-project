@@ -8,13 +8,11 @@ pipeline {
     }
 
     stages {
-        stage('Clone') {
+        stage('Checkout Code') {
             steps {
-                git url: 'https://github.com/dityak/devops-project.git'
+                checkout scm   // ✅ Uses Jenkins' default checkout mechanism
             }
         }
-
-
 
         stage('Install Dependencies') {
             steps {
@@ -41,21 +39,18 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                echo '🐳 Building Docker image...'
                 sh 'docker build -t $IMAGE_NAME .'
             }
         }
 
         stage('Trivy Scan') {
             steps {
-                echo '🔎 Running Trivy security scan...'
                 sh 'trivy image --exit-code 0 --severity HIGH,CRITICAL $IMAGE_NAME'
             }
         }
 
         stage('Deploy to Netlify') {
             steps {
-                echo '🚀 Deploying to Netlify...'
                 sh 'npm run build'
                 sh 'netlify deploy --prod --dir=build'
             }
