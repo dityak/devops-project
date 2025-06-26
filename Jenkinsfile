@@ -25,18 +25,13 @@ pipeline {
                 echo '🔍 Installing sonar-scanner...'
                 sh 'npm install -g sonar-scanner'
 
-                echo '📂 Checking if sonar-project.properties exists...'
-                sh '''
-                    if [ ! -f sonar-project.properties ]; then
-                        echo "❌ sonar-project.properties not found in root directory."
-                        exit 1
-                    fi
-                '''
-
                 echo '🔍 Running SonarQube Analysis...'
                 withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
                     withSonarQubeEnv('SonarQube') {
-                        sh 'sonar-scanner -Dsonar.token=$SONAR_AUTH_TOKEN'
+                        sh '''
+                            sonar-scanner \
+                            -Dsonar.token=$SONAR_AUTH_TOKEN
+                        '''
                     }
                 }
             }
