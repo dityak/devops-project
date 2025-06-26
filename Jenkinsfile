@@ -51,7 +51,7 @@ pipeline {
             steps {
                 sh 'npm run build'
                 withCredentials([string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN')]) {
-                    sh 'netlify deploy --prod --dir=dist'
+                    sh 'npx netlify-cli deploy --prod --dir=dist --auth=$NETLIFY_AUTH_TOKEN'
                 }
             }
         }
