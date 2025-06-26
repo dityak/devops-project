@@ -18,3 +18,22 @@ fetch('daily_crossword.json')
       <strong>Down:</strong><br>${Object.entries(clues.down).map(([k, v]) => `${k}. ${v}`).join('<br>')}
     `;
   });
+
+
+// ✅ Crossword validation function
+function checkCrossword() {
+  const inputs = document.querySelectorAll('#crossword input');
+  const userAnswers = Array.from(inputs).map(input => input.disabled ? "" : input.value.toUpperCase());
+
+  const correctAnswers = [
+    'C','A','T','',
+    '','','R','',
+    'D','O','G',''
+  ];
+
+  const isCorrect = userAnswers.every((val, idx) => val === correctAnswers[idx]);
+
+  const feedback = document.getElementById('crosswordFeedback');
+  feedback.innerText = isCorrect ? "✅ Well done!" : "❌ Try again!";
+  feedback.style.color = isCorrect ? "lightgreen" : "red";
+}
