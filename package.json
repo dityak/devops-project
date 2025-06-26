@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
+    "build": "mkdir -p dist && cpy 'public/**/*' dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,6 +14,7 @@
   "dependencies": {
     "brace-expansion": "^2.0.2",
     "cross-spawn": "^7.0.5",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "cpy-cli": "^5.0.0"
   }
 }
