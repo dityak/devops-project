@@ -21,14 +21,22 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 echo '🔍 Running SonarQube Analysis...'
-                // Add actual sonar scanner command here
+                withSonarQubeEnv('SonarQube') {
+                    sh '''
+                        sonar-scanner \
+                        -Dsonar.projectKey=daily-question-wall \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://localhost:9001 \
+                        -Dsonar.login=squ_0825101770eb70e39b88eb2cc0f519f279353919
+                    '''
+                }
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 echo '🐳 Building Docker image...'
-                // Example:
+                // Replace with actual Docker build command
                 // sh 'docker build -t my-app .'
             }
         }
@@ -36,7 +44,7 @@ pipeline {
         stage('Trivy Scan') {
             steps {
                 echo '🔎 Running Trivy security scan...'
-                // Example:
+                // Replace with actual Trivy scan command
                 // sh 'trivy image my-app'
             }
         }
@@ -44,7 +52,7 @@ pipeline {
         stage('Deploy to Netlify') {
             steps {
                 echo '🚀 Deploying to Netlify...'
-                // Example Netlify CLI command (replace with your own):
+                // Replace with actual Netlify deploy command
                 // sh 'netlify deploy --prod --dir=public'
             }
         }
