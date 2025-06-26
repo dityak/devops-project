@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         PATH = "/usr/local/bin:$PATH"
+        SONAR_AUTH_TOKEN = credentials('SONAR_AUTH_TOKEN') // ID of secret text in Jenkins
     }
 
     stages {
@@ -25,7 +26,9 @@ pipeline {
                     sh '''
                         sonar-scanner \
                         -Dsonar.projectKey=daily-question-wall \
-                        -Dsonar.sources=.
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://localhost:9001 \
+                        -Dsonar.login=$SONAR_AUTH_TOKEN
                     '''
                 }
             }
@@ -34,7 +37,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo '🐳 Building Docker image...'
-                // Example:
+                // Uncomment and replace with actual Docker build command
                 // sh 'docker build -t my-app .'
             }
         }
@@ -42,7 +45,7 @@ pipeline {
         stage('Trivy Scan') {
             steps {
                 echo '🔎 Running Trivy security scan...'
-                // Example:
+                // Uncomment and replace with actual Trivy scan command
                 // sh 'trivy image my-app'
             }
         }
@@ -50,7 +53,7 @@ pipeline {
         stage('Deploy to Netlify') {
             steps {
                 echo '🚀 Deploying to Netlify...'
-                // Example:
+                // Uncomment and replace with actual Netlify deploy command
                 // sh 'netlify deploy --prod --dir=public'
             }
         }
