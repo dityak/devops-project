@@ -10,8 +10,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                checkout scm // ✅ Uses Jenkins' default checkout mechanism
-                
+                checkout scm
             }
         }
 
@@ -24,24 +23,20 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 echo '🔍 Installing sonar-scanner...'
+                sh 'npm install -g sonar-scanner'
 
-                sh 'npm install -g sonar-scanner' // ✅ install the CLI temporarily
-
+                echo '📂 Checking if sonar-project.properties exists...'
+                sh '''
+                    if [ ! -f sonar-project.properties ]; then
+                        echo "❌ sonar-project.properties not found in root directory."
+                        exit 1
+                    fi
+                '''
 
                 echo '🔍 Running SonarQube Analysis...'
                 withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
                     withSonarQubeEnv('SonarQube') {
-
-                        sh """
-
-    sonar-scanner \
-    -Dsonar.projectKey=devops-project \
-    -Dsonar.sources=. \
-    -Dsonar.host.url=http://192.168.0.182:9001 \
-    -Dsonar.token=${SONAR_AUTH_TOKEN}
-"""
-
-
+                        sh 'sonar-scanner -Dsonar.token=$SONAR_AUTH_TOKEN'
                     }
                 }
             }
