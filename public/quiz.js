@@ -2,7 +2,7 @@ document.getElementById('username').innerText = localStorage.getItem('name');
 let time = 30;
 let correctAnswer = "";
 
-fetch('/api/question')
+fetch('daily_question.json')
   .then(res => res.json())
   .then(data => {
     document.getElementById('question').innerText = data.question;

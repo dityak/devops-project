@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "build": "mkdir -p dist && cp -r public/* dist/"
-
+    
+      "start": "node server.js",
+      "build": "mkdir -p dist && cp *.html dist/ && cp -r public/* dist/ && cp *.json dist/"
+    
+    
 ,
     "test": "echo \"Error: no test specified\" && exit 1"
   },

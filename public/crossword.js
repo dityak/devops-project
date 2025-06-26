@@ -1,4 +1,4 @@
-fetch('/api/crossword')
+fetch('daily_crossword.json')
   .then(res => res.json())
   .then(data => {
     const { grid, clues } = data;
