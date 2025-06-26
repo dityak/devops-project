@@ -18,7 +18,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
-                sh 'npm install -g netlify-cli' // For Netlify deployment
+                sh 'npm install -g netlify-cli'
             }
         }
 
@@ -30,9 +30,15 @@ pipeline {
                 echo '🔍 Running SonarQube Analysis...'
                 withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
                     withSonarQubeEnv('SonarQube') {
-                        dir("${env.WORKSPACE}") {
-                            sh 'sonar-scanner'
-                        }
+                        sh """
+                            sonar-scanner \
+                            -Dsonar.projectKey=dailywall-app \
+                            -Dsonar.projectName='Daily Wall App' \
+                            -Dsonar.sources=. \
+                            -Dsonar.sourceEncoding=UTF-8 \
+                            -Dsonar.host.url=http://192.168.0.182:9001 \
+                            -Dsonar.token=$SONAR_AUTH_TOKEN
+                        """
                     }
                 }
             }
@@ -52,9 +58,9 @@ pipeline {
 
         stage('Deploy to Netlify') {
             steps {
-                sh 'npm run build' // This should generate the "build" folder
+                sh 'npm run build'
                 withCredentials([string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN')]) {
-                    sh 'npx netlify deploy --prod --dir=build --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID'
+                    sh 'npx netlify-cli deploy --prod --dir=dist --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID'
                 }
             }
         }
