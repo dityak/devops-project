@@ -25,9 +25,7 @@ pipeline {
                     sh '''
                         sonar-scanner \
                         -Dsonar.projectKey=daily-question-wall \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=http://localhost:9001 \
-                        -Dsonar.login=squ_0825101770eb70e39b88eb2cc0f519f279353919
+                        -Dsonar.sources=.
                     '''
                 }
             }
@@ -36,7 +34,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo '🐳 Building Docker image...'
-                // Replace with actual Docker build command
+                // Example:
                 // sh 'docker build -t my-app .'
             }
         }
@@ -44,7 +42,7 @@ pipeline {
         stage('Trivy Scan') {
             steps {
                 echo '🔎 Running Trivy security scan...'
-                // Replace with actual Trivy scan command
+                // Example:
                 // sh 'trivy image my-app'
             }
         }
@@ -52,7 +50,7 @@ pipeline {
         stage('Deploy to Netlify') {
             steps {
                 echo '🚀 Deploying to Netlify...'
-                // Replace with actual Netlify deploy command
+                // Example:
                 // sh 'netlify deploy --prod --dir=public'
             }
         }
