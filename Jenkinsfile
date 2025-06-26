@@ -24,27 +24,25 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-    steps {
-        echo '🔍 Running SonarQube Analysis...'
-        withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
-            withSonarQubeEnv('SonarQube') {
-                dir("${env.WORKSPACE}") {
-                    sh '''
-                        sonar-scanner \
-                        -Dsonar.projectKey=dailywall-app \
-                        -Dsonar.projectName="Daily Wall App" \
-                        -Dsonar.sources=. \
-                        -Dsonar.sourceEncoding=UTF-8 \
-                        -Dsonar.host.url=http://192.168.0.182:9001 \
-                        -Dsonar.token=$SONAR_AUTH_TOKEN
-                    '''
+            steps {
+                echo '🔍 Running SonarQube Analysis...'
+                withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
+                    withSonarQubeEnv('SonarQube') {
+                        dir("${env.WORKSPACE}") {
+                            sh '''
+                                sonar-scanner \
+                                -Dsonar.projectKey=dailywall-app \
+                                -Dsonar.projectName="Daily Wall App" \
+                                -Dsonar.sources=. \
+                                -Dsonar.sourceEncoding=UTF-8 \
+                                -Dsonar.host.url=http://192.168.0.182:9001 \
+                                -Dsonar.login=$SONAR_AUTH_TOKEN
+                            '''
+                        }
+                    }
                 }
             }
         }
-    }
-}
-
-
 
         stage('Build Docker Image') {
             steps {
@@ -60,6 +58,7 @@ pipeline {
 
         stage('Deploy to Netlify') {
             steps {
+                echo '📦 Running npm build to prepare dist folder...'
                 sh 'npm run build'
                 withCredentials([string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN')]) {
                     sh 'npx netlify deploy --prod --dir=dist --auth=$NETLIFY_AUTH_TOKEN --site=$NETLIFY_SITE_ID'
