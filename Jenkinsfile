@@ -28,10 +28,7 @@ pipeline {
                 echo '🔍 Running SonarQube Analysis...'
                 withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
                     withSonarQubeEnv('SonarQube') {
-                        sh '''
-                            sonar-scanner \
-                            -Dsonar.token=$SONAR_AUTH_TOKEN
-                        '''
+                        sh 'sonar-scanner'
                     }
                 }
             }
