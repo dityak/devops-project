@@ -31,13 +31,14 @@ pipeline {
                 echo '🔍 Running SonarQube Analysis...'
                 withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
                     withSonarQubeEnv('SonarQube') {
-                        sh '''
+                        sh """
     sonar-scanner \
     -Dsonar.projectKey=devops-project \
     -Dsonar.sources=. \
     -Dsonar.host.url=http://192.168.0.182:9001 \
-    -Dsonar.token=$SONAR_AUTH_TOKEN
-'''
+    -Dsonar.token=${SONAR_AUTH_TOKEN}
+"""
+
 
                     }
                 }
