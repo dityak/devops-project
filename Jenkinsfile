@@ -28,6 +28,7 @@ pipeline {
                 echo '🔍 Running SonarQube Analysis...'
                 withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
                     withSonarQubeEnv('SonarQube') {
+                        // sonar-project.properties in repo handles config
                         sh 'sonar-scanner'
                     }
                 }
