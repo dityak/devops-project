@@ -17,7 +17,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
-            }
+            }code Jenkinsfile
+
         }
 
     stage('SonarQube Analysis') {
