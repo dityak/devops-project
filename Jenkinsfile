@@ -10,57 +10,35 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-<<<<<<< HEAD
-                checkout scm   // ✅ Uses Jenkins' default checkout mechanism
-=======
-                git url: 'https://github.com/dityak/devops-project.git'
-
->>>>>>> Fix: Install sonar-scanner via npm in Jenkins pipeline
+                checkout scm // ✅ Uses Jenkins' default checkout mechanism
             }
         }
 
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
-            }code Jenkinsfile
-
-        }
-
-<<<<<<< HEAD
-    stage('SonarQube Analysis') {
-    steps {
-        echo '🔍 Installing sonar-scanner...'
-        sh 'npm install -g sonar-scanner'  // ✔ install sonar-scanner inside Jenkins step
-=======
-        stage('SonarQube Analysis') {
-    steps {
-        echo '🔍 Installing sonar-scanner...'
-        sh 'npm install -g sonar-scanner'  // ✅ install the CLI temporarily
->>>>>>> Fix: Install sonar-scanner via npm in Jenkins pipeline
-
-        echo '🔍 Running SonarQube Analysis...'
-        withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
-            withSonarQubeEnv('SonarQube') {
-                sh '''
-                    sonar-scanner \
-<<<<<<< HEAD
-                    -Dsonar.projectKey=devops-project \
-=======
-                    -Dsonar.projectKey=daily-question-wall \
->>>>>>> Fix: Install sonar-scanner via npm in Jenkins pipeline
-                    -Dsonar.sources=. \
-                    -Dsonar.host.url=http://192.168.0.182:9001 \
-                    -Dsonar.token=$SONAR_AUTH_TOKEN
-                '''
             }
         }
-    }
-}
 
-<<<<<<< HEAD
+        stage('SonarQube Analysis') {
+            steps {
+                echo '🔍 Installing sonar-scanner...'
+                sh 'npm install -g sonar-scanner' // ✅ install the CLI temporarily
 
-=======
->>>>>>> Fix: Install sonar-scanner via npm in Jenkins pipeline
+                echo '🔍 Running SonarQube Analysis...'
+                withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
+                    withSonarQubeEnv('SonarQube') {
+                        sh '''
+                            sonar-scanner \
+                            -Dsonar.projectKey=daily-question-wall \
+                            -Dsonar.sources=. \
+                            -Dsonar.host.url=http://192.168.0.182:9001 \
+                            -Dsonar.token=$SONAR_AUTH_TOKEN
+                        '''
+                    }
+                }
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
