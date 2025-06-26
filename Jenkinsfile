@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         PATH = "/usr/local/bin:$PATH"
+        IMAGE_NAME = "dailywall-app"
         SONAR_AUTH_TOKEN = credentials('SONAR_AUTH_TOKEN')
     }
 
@@ -39,14 +40,14 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo '🐳 Building Docker image...'
-                sh 'docker build -t daily-question-wall .'
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
 
         stage('Trivy Scan') {
             steps {
                 echo '🔎 Running Trivy security scan...'
-                sh 'trivy image daily-question-wall || true'
+                sh 'trivy image --exit-code 0 --severity HIGH,CRITICAL $IMAGE_NAME'
             }
         }
 
