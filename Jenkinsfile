@@ -1,4 +1,4 @@
-pipeline {
+// pipeline {
     agent any
 
     environment {
@@ -17,6 +17,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
+                sh 'npm install -g netlify-cli' // Install netlify CLI globally
             }
         }
 
@@ -28,7 +29,6 @@ pipeline {
                 echo '🔍 Running SonarQube Analysis...'
                 withCredentials([string(credentialsId: 'SONAR_AUTH_TOKEN', variable: 'SONAR_AUTH_TOKEN')]) {
                     withSonarQubeEnv('SonarQube') {
-                        // sonar-project.properties in repo handles config
                         sh 'sonar-scanner'
                     }
                 }
@@ -50,7 +50,9 @@ pipeline {
         stage('Deploy to Netlify') {
             steps {
                 sh 'npm run build'
-                sh 'netlify deploy --prod --dir=build'
+                withCredentials([string(credentialsId: 'NETLIFY_AUTH_TOKEN', variable: 'NETLIFY_AUTH_TOKEN')]) {
+                    sh 'netlify deploy --prod --dir=dist'
+                }
             }
         }
     }
